@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import "./ExpenseList.css";
 
 export const ExpenseList = () => {
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState(
+    () => JSON.parse(localStorage.getItem("expenses")) || []
+  );
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -17,10 +19,15 @@ export const ExpenseList = () => {
         )
       ) / 100
     );
+    localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
   const addExpense = (expense) => {
     setExpenses((e) => [...e, expense]);
+  };
+
+  const deleteExpense = (id) => {
+    setExpenses((ex) => ex.filter((e) => e.id !== id));
   };
 
   if (!expenses.length) {
@@ -37,16 +44,11 @@ export const ExpenseList = () => {
       <tr key={e.id}>
         <td>{e.description}</td>
         <td>${e.amount}</td>
+        <td>
+          <button onClick={() => deleteExpense(e.id)}>Delete</button>
+        </td>
       </tr>
     ));
-  };
-
-  const getTableStyle = () => {
-    return {
-      width: "100%",
-      border: "1px solid black",
-      borderCollapse: "collapse",
-    };
   };
 
   return (
