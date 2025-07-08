@@ -11,13 +11,12 @@ export const ExpenseList = () => {
 
   useEffect(() => {
     setTotal(
-      Math.floor(
-        Math.round(
-          expenses
-            .map((e) => Number(e.amount))
-            .reduce((acc, cur) => acc + cur, 0) * 100
-        )
-      ) / 100
+      Number(
+        expenses
+          .map((e) => Number(e.amount))
+          .reduce((acc, cur) => acc + cur, 0)
+          .toFixed(2)
+      )
     );
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
